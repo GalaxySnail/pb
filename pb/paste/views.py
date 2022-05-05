@@ -139,7 +139,7 @@ def post(label=None, namespace=None):
         except errors.DuplicateKeyError:
             return StatusResponse("label already exists.", 409)
         invalidate(**paste)
-        uuid = str(UUID(hex=paste['_id']))
+        uuid = str(UUID(hex=paste["_id"]))
         status = "created"
 
     return PasteResponse(paste, status, filename, uuid)
@@ -180,7 +180,7 @@ def put(**kwargs):
 
     # FIXME: such query; wow
     invalidate(**kwargs)
-    result = model.put(stream, headers=headers, **kwargs)
+    result = model.put(stream, headers=headers, **kwargs).raw_result
     if result['n']:
         paste = next(model.get_meta(**kwargs))
         return PasteResponse(paste, "updated")
@@ -195,7 +195,7 @@ def delete(**kwargs):
         kwargs = _namespace_kwargs(kwargs)
 
     paste = invalidate(**kwargs)
-    result = model.delete(**kwargs)
+    result = model.delete(**kwargs).raw_result
     if result['n']:
         return PasteResponse(paste, "deleted")
     return StatusResponse("not found", 404)
