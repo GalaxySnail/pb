@@ -2,7 +2,7 @@ from hashlib import sha1
 from time import time
 
 from flask import url_for
-from yaml import load
+from yaml import safe_load as load
 
 from pb.pb import create_app
 

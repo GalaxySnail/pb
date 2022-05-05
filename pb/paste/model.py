@@ -39,7 +39,7 @@ def _put(stream):
     digest = sha1(b).hexdigest()
     size = len(b)
     
-    if len(stream.getvalue()) > 2 ** 23:
+    if size > 2 ** 23:
         b = get_fs().put(b)
     
     return dict(
@@ -63,20 +63,20 @@ def insert(stream, **kwargs):
         date=datetime.utcnow(),
         **transform(kwargs)
     )
-    get_db().pastes.insert(d)
+    get_db().pastes.insert_one(d)
     return d
 
 
 def put(stream, mimetype=None, headers={}, **kwargs):
     args = _put(stream)
     args.update(mimetype=mimetype, headers=headers)
-    return get_db().pastes.update(transform(kwargs), {
+    return get_db().pastes.update_one(transform(kwargs), {
         '$set': transform(args)
     })
 
 
 def delete(**kwargs):
-    return get_db().pastes.remove(transform(kwargs))
+    return get_db().pastes.delete_one(transform(kwargs))
 
 
 def get_digest(stream=None, content=None):

@@ -15,7 +15,7 @@ from urllib.parse import urljoin
 
 from flask import current_app, g, request
 from requests.sessions import Session
-from werkzeug.wrappers import get_host
+from werkzeug.wsgi import get_host
 
 from pb.paste import model
 

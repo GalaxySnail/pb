@@ -3,7 +3,7 @@ from os import urandom
 from time import monotonic, time
 
 import pytest
-from yaml import load
+from yaml import safe_load as load
 
 from pb.pb import create_app
 

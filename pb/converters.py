@@ -28,7 +28,11 @@ class UnhexMixin:
 
         if isinstance(value, str):
             return f(value)
-        sid, filename = value
+        # print(f"{value = }, {type(value) = }")
+        # print(f"{self = }, {type(self) = }")
+        # from pprint import pformat
+        # print(f"dir(self) = {pformat(dir(self))}")
+        sid, filename = value[:2]  # somethings ('f2258f', '8iWP', '8iWP') WTF???
         ext = path.splitext(filename)[1] if filename else ''
         return '{}{}'.format(f(sid), ext)
 

@@ -1,10 +1,9 @@
 from flask.ctx import RequestContext as BaseRequestContext
 from werkzeug import routing
-from werkzeug._compat import to_unicode
 from werkzeug.exceptions import HTTPException
 from werkzeug.routing import MapAdapter as BaseMapAdapter
 from werkzeug.routing import (MethodNotAllowed, NotFound, RequestAliasRedirect,
-                              RequestRedirect, RequestSlash)
+                              RequestRedirect)
 from werkzeug.routing import Rule as BaseRule
 from werkzeug.urls import url_quote
 
@@ -15,6 +14,7 @@ from pb.util import get_host_name
 class Rule(BaseRule):
     def __init__(self, *args, namespace_only=False, **kwargs):
         self.namespace_only = namespace_only
+        kwargs["strict_slashes"] = True
 
         super().__init__(*args, **kwargs)
 
@@ -50,8 +50,10 @@ class MapAdapter(BaseMapAdapter):
         self.map.update()
         if path_info is None:
             path_info = self.path_info
+        elif isinstance(path_info, (bytes, bytearray)):
+            path_info = path_info.decode(self.map.charset)
         else:
-            path_info = to_unicode(path_info, self.map.charset)
+            path_info = str(path_info)
         if query_args is None:
             query_args = self.query_args
         method = (method or self.default_method).upper()
@@ -65,10 +67,6 @@ class MapAdapter(BaseMapAdapter):
         for rule in self.map._rules:
             try:
                 rv = rule.match(path, request)
-            except RequestSlash:
-                raise RequestRedirect(self.make_redirect_url(
-                    url_quote(path_info, self.map.charset,
-                              safe='/:|+') + '/', query_args))
             except RequestAliasRedirect as e:
                 raise RequestRedirect(self.make_alias_redirect_url(
                     path, rule.endpoint, e.matched_values, method, query_args))

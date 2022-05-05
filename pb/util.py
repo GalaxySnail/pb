@@ -22,7 +22,7 @@ from pygments.formatters import HtmlFormatter, get_formatter_by_name
 from pygments.token import Token
 from pygments.util import ClassNotFound
 from werkzeug import http
-from werkzeug.wrappers import get_host
+from werkzeug.wsgi import get_host
 
 from pb.lexers import get_lexer_by_name
 

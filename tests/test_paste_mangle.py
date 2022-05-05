@@ -2,7 +2,7 @@ from time import time
 
 from flask import url_for
 import pytest
-from yaml import load
+from yaml import safe_load as load
 
 
 lexer_tests = [
