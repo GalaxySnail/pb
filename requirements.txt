@@ -1,7 +1,7 @@
 Flask==2.1.2
 Werkzeug==2.1.2
 PyYAML==6.0
-Pygments==2.2.0
+Pygments==2.12.0
 requests==2.27.1
 docutils==0.14
 pyxdg==0.26
