@@ -48,6 +48,7 @@ def test_delete():
         c='delete me KU7cC3JBrz0jMXYRCWsZ6YGa/YTYIZWw'
     ))
     data = load(rv.get_data())
+    assert data.get('uuid')
     assert 'redacted' not in data.get('uuid')
 
     with app.test_request_context():
